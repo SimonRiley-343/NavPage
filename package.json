@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --dest backend/webdist",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "babel-eslint": "^10.1.0",
     "core-js": "^3.6.5",
+    "element-ui": "^2.13.2",
+    "eslint-plugin-html": "^6.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
