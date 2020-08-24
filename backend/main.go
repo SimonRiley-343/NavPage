@@ -1,23 +1,24 @@
 package main
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"time"
+	"backend/api"
+	"backend/storage"
+	"log"
 )
 
 func main() {
-	router := gin.Default()
-	router.LoadHTMLGlob("webdist/*.html")
-	router.Static("/", "./webdist")
+	router := api.Router{
+		Port: 8080,
+	}
+	router.Run()
 
-	router.Use(cors.New(cors.Config{
-		AllowOriginFunc:  func(origin string) bool { return true },
-		AllowMethods:     []string{"POST"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
+	readConf()
+}
 
-	router.Run(":8080")
+func readConf() {
+	db, err := storage.Open()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer db.Close()
 }
