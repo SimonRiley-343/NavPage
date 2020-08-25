@@ -8,7 +8,7 @@ import (
 )
 
 type Client struct {
-	db *storm.DB
+	DB *storm.DB
 }
 
 func Open() (*Client, error) {
@@ -17,11 +17,11 @@ func Open() (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Client{db: db}, nil
+	return &Client{DB: db}, nil
 }
 
 func (c *Client) Close() {
-	if err := c.db.Close(); err != nil {
+	if err := c.DB.Close(); err != nil {
 		log.Println(err)
 	}
 }

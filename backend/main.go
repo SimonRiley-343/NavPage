@@ -2,23 +2,22 @@ package main
 
 import (
 	"backend/api"
-	"backend/storage"
 	"log"
 )
 
 func main() {
-	router := api.Router{
-		Port: 8080,
-	}
-	router.Run()
-
-	readConf()
-}
-
-func readConf() {
-	db, err := storage.Open()
+	data := api.Data{}
+	err := data.CheckData()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer db.Close()
+
+	router := api.Router{
+		Port: 8080,
+	}
+	router.Init()
+	err = router.Run()
+	if err != nil {
+		log.Fatalln(err)
+	}
 }

@@ -8,21 +8,28 @@ import (
 )
 
 type Router struct {
-	Port int
+	Port 	int
+	Router 	*gin.Engine
 }
 
-func (r Router) Run() {
-	router := gin.Default()
-	router.LoadHTMLGlob("webdist/*.html")
-	router.Static("/", "webdist")
+func (r *Router) Init() {
+	r.Router = gin.Default()
+	r.Router.LoadHTMLGlob("webdist/*.html")
+	r.Router.Static("/", "webdist")
 
-	router.Use(cors.New(cors.Config{
+	r.Router.Use(cors.New(cors.Config{
 		AllowOriginFunc:  func(origin string) bool { return true },
 		AllowMethods:     []string{"POST"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+}
 
-	router.Run(":" + strconv.Itoa(r.Port))
+func (r *Router) SetPost(relativePath string, handlerFunc gin.HandlerFunc) {
+	r.Router.POST(relativePath, handlerFunc)
+}
+
+func (r *Router) Run() error {
+	return r.Router.Run(":" + strconv.Itoa(r.Port))
 }

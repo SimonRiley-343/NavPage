@@ -3,6 +3,7 @@ node_modules
 /dist
 /backend/webdist
 /backend/bin
+*.db
 
 # local env files
 .env.local
