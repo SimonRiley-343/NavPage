@@ -3,7 +3,6 @@ package main
 import (
 	"backend/api"
 	"backend/storage"
-	"fmt"
 	"log"
 )
 
@@ -13,21 +12,13 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	ud := storage.UserData{}
-	auth, err := ud.CheckPasswd(1001, "passwda")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	if auth {
-		fmt.Println("Right password")
-	} else {
-		fmt.Println("Wrong password")
-	}
-
 	router := api.Router{
 		Port: 8080,
 	}
 	router.Init()
+
+	router.SetPost("/api/login", api.Login)
+
 	err = router.Run()
 	if err != nil {
 		log.Fatalln(err)
