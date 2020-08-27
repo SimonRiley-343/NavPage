@@ -67,6 +67,33 @@ func (ud *UserData) CheckPasswd(id int, passwd string) (bool, error) {
 	}
 }
 
+func (ud *UserData) GetUserId(user string) (int, error) {
+	s, err := Open()
+	if err != nil {
+		return 0, err
+	}
+	defer s.Close()
+
+	var id int
+	rows, err := s.DB.Query(`SELECT id FROM user WHERE user = ?;`,
+		user)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		if err = rows.Scan(&id); err != nil {
+			return 0, err
+		}
+	}
+
+	if rows.Err() != nil {
+		return 0, rows.Err()
+	}
+
+	return id, nil
+}
+
 func (ud *UserData) UpdateUser(id int, new string) error {
 	s, err := Open()
 	if err != nil {
