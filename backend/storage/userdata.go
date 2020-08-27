@@ -6,9 +6,9 @@ import (
 )
 
 type UserData struct {
-	id 		int
-	user 	string
-	passwd 	string
+	id     int
+	user   string
+	passwd string
 }
 
 func (ud *UserData) Init() error {
@@ -77,6 +77,21 @@ func (ud *UserData) UpdateUser(id int, new string) error {
 	_, err = s.DB.Exec(`UPDATE user SET user = ? WHERE id = ?;`,
 		new, id)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ud *UserData) UpdatePasswd(id int, new string) error {
+	s, err := Open()
+	if err != nil {
+		return err
+	}
+	defer s.Close()
+
+	passwdHash, err := bcrypt.GenerateFromPassword([]byte(new), bcrypt.DefaultCost)
+	if _, err = s.DB.Exec(`UPDATE user SET passwd = ? WHERE id = ?;`,
+		string(passwdHash), id); err != nil {
 		return err
 	}
 	return nil
