@@ -66,7 +66,7 @@ func createTable(table string, s *Storage) error {
 			return err
 		}
 	case "page":
-		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY, name TEXT, url TEXT, img TEXT);`)
+		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY, name TEXT, des TEXT, url TEXT);`)
 		if err != nil {
 			return err
 		}

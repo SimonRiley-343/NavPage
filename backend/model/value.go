@@ -7,8 +7,8 @@ const (
 	DB_USER_DEFAULT_PASSWD = "passwd"
 	DB_PAGE_DEFAULT_ID     = 1001
 	DB_PAGE_DEFAULT_NAME   = "Example"
+	DB_PAGE_DEFAULT_DESC   = "Example description"
 	DB_PAGE_DEFAULT_URL    = "/"
-	DB_PAGE_DEFAULT_IMG    = "/example.png"
 
 	POST_FORM_USER   = "user"
 	POST_FORM_PASSWD = "passwd"

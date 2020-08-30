@@ -15,6 +15,6 @@ type ResultMsgPages struct {
 type Pages struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
+	Desc string `json:"desc"`
 	Url  string `json:"url"`
-	Img  string `json:"img"`
 }
