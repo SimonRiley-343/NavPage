@@ -8,8 +8,8 @@ import (
 )
 
 type Router struct {
-	Port 	int
-	Router 	*gin.Engine
+	Port   int
+	Router *gin.Engine
 }
 
 func (r *Router) Init() {

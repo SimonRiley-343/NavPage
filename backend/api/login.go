@@ -12,8 +12,8 @@ func Login(c *gin.Context) {
 	user := c.PostForm(model.POST_FORM_USER)
 	passwd := c.PostForm(model.POST_FORM_PASSWD)
 
-	reqMsg := model.ResultMsg{}
-	reqMsgLoginFailed := model.ResultMsg{
+	reqMsg := model.ResultMsgLogin{}
+	reqMsgLoginFailed := model.ResultMsgLogin{
 		Code: model.REQ_CODE_LOGIN_FAILED,
 		Msg:  model.REQ_MSG_LOGIN_FAILED,
 	}
@@ -26,30 +26,16 @@ func Login(c *gin.Context) {
 	}
 
 	ud := storage.UserData{}
-	id, err := ud.GetUserId(user)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	if id == 0 {
-		c.JSON(http.StatusOK, reqMsgLoginFailed)
-		return
-	}
 
-	if isCorrect, err := ud.CheckPasswd(id, passwd); err != nil {
+	if userId, err := ud.CheckPasswd(user, passwd); err != nil {
 		log.Fatalln(err)
-	} else if !isCorrect {
+	} else if userId == 0 {
 		c.JSON(http.StatusOK, reqMsgLoginFailed)
-		return
-	} else if isCorrect {
+	} else {
 		reqMsg.Code = model.REQ_CODE_SUCCESS
-		reqMsg.Id = id
-		reqMsg.Msg = model.REQ_MSG_LOGIN_SUCCESS
+		reqMsg.Id = userId
+		reqMsg.Msg = model.REQ_MSG_SUCCESS
 		c.JSON(http.StatusOK, reqMsg)
-		return
 	}
-
-	reqMsg.Code = model.REQ_CODE_UNKNOWN_ERR
-	reqMsg.Msg = model.REQ_MSG_UNKNOWN_ERR
-	c.JSON(http.StatusInternalServerError, reqMsg)
 	return
 }

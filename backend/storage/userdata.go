@@ -33,56 +33,23 @@ func (ud *UserData) Init() error {
 	return nil
 }
 
-func (ud *UserData) CheckPasswd(id int, passwd string) (bool, error) {
-	s, err := Open()
-	if err != nil {
-		return false, err
-	}
-	defer s.Close()
-
-	var passwdHash string
-	rows, err := s.DB.Query(`SELECT passwd FROM user WHERE id = ?;`,
-		id)
-	if err != nil {
-		return false, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		if err = rows.Scan(&passwdHash); err != nil {
-			return false, err
-		}
-	}
-
-	if rows.Err() != nil {
-		return false, rows.Err()
-	}
-
-	if err = bcrypt.CompareHashAndPassword([]byte(passwdHash), []byte(passwd)); err != nil {
-		if err.Error() == model.ERROR_PASSWD_WRONG {
-			err = nil
-		}
-		return false, err
-	} else {
-		return true, nil
-	}
-}
-
-func (ud *UserData) GetUserId(user string) (int, error) {
+func (ud *UserData) CheckPasswd(user string, passwd string) (int, error) {
 	s, err := Open()
 	if err != nil {
 		return 0, err
 	}
 	defer s.Close()
 
-	var id int
-	rows, err := s.DB.Query(`SELECT id FROM user WHERE user = ?;`,
+	var passwdHash string
+	var userId int
+	rows, err := s.DB.Query(`SELECT id, passwd FROM user WHERE id = ?;`,
 		user)
 	if err != nil {
 		return 0, err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		if err = rows.Scan(&id); err != nil {
+		if err = rows.Scan(&userId, &passwdHash); err != nil {
 			return 0, err
 		}
 	}
@@ -91,7 +58,14 @@ func (ud *UserData) GetUserId(user string) (int, error) {
 		return 0, rows.Err()
 	}
 
-	return id, nil
+	if err = bcrypt.CompareHashAndPassword([]byte(passwdHash), []byte(passwd)); err != nil {
+		if err.Error() == model.ERROR_PASSWD_WRONG {
+			err = nil
+		}
+		return 0, err
+	} else {
+		return userId, nil
+	}
 }
 
 func (ud *UserData) UpdateUser(id int, new string) error {

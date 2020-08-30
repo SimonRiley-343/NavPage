@@ -18,6 +18,7 @@ func main() {
 	router.Init()
 
 	router.SetPost("/api/login", api.Login)
+	router.SetPost("/api/pages", api.Pages)
 
 	err = router.Run()
 	if err != nil {
