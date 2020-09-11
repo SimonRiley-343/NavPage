@@ -34,7 +34,7 @@ func CheckTable() error {
 	}
 	defer s.Close()
 
-	tableList := []string{"user", "page"}
+	tableList := []string{"config", "page"}
 
 	for _, table := range tableList {
 		row := s.DB.QueryRow(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`,
@@ -56,22 +56,22 @@ func CheckTable() error {
 
 func createTable(table string, s *Storage) error {
 	switch table {
-	case "user":
-		_, err := s.DB.Exec(`CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, user TEXT, passwd TEXT);`)
-		if err != nil {
-			return err
-		}
-		ud := UserData{}
-		if err = ud.Init(); err != nil {
-			return err
-		}
 	case "page":
-		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY, name TEXT, desc TEXT, url TEXT);`)
+		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, desc TEXT, url TEXT NOT NULL);`)
 		if err != nil {
 			return err
 		}
 		pd := PageData{}
 		if err = pd.Init(); err != nil {
+			return err
+		}
+	case "config":
+		_, err := s.DB.Exec(`CREATE TABLE config (name TEXT NOT NULL PRIMARY KEY, value TEXT NOT NULL);`)
+		if err != nil {
+			return err
+		}
+		conf := ConfData{}
+		if err = conf.Init(); err != nil {
 			return err
 		}
 	default:

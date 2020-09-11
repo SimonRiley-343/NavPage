@@ -3,6 +3,7 @@ package main
 import (
 	"backend/api"
 	"backend/storage"
+	"flag"
 	"log"
 )
 
@@ -12,8 +13,18 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	port := *flag.Int("p", 0, "Set port")
+
+	if port == 0 {
+		conf := storage.ConfData{}
+		port, err = conf.Port()
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 	router := api.Router{
-		Port: 8080,
+		Port: port,
 	}
 	router.Init()
 

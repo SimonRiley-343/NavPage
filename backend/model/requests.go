@@ -1,9 +1,9 @@
 package model
 
 type ResultMsgLogin struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-	Id   int    `json:"id,omitempty"`
+	Code  int    `json:"code"`
+	Msg   string `json:"msg"`
+	Login bool   `json:"login"`
 }
 
 type ResultMsgPages struct {
