@@ -13,7 +13,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	port := *flag.Int("p", 0, "Set port")
+	var port int
+	flag.IntVar(&port, "p", 0, "Set port")
+
+	flag.Parse()
 
 	if port == 0 {
 		conf := storage.ConfData{}
@@ -28,8 +31,8 @@ func main() {
 	}
 	router.Init()
 
-	router.SetPost("/api/login", api.Login)
-	router.SetPost("/api/pages", api.Pages)
+	router.SetPost("/login", api.Login)
+	router.SetPost("/pages", api.Pages)
 
 	err = router.Run()
 	if err != nil {

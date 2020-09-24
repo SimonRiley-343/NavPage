@@ -6,6 +6,7 @@ const (
 	DB_PAGE_DEFAULT_NAME     = "Example"
 	DB_PAGE_DEFAULT_DESC     = "Example description"
 	DB_PAGE_DEFAULT_URL      = "/"
+	DB_PAGE_DEFAULT_CAT      = ""
 	DB_CONFIG_PASSWD         = "passwd"
 	DB_CONFIG_PORT           = "port"
 	DB_CONFIG_DEFAULT_PASSWD = "passwd"

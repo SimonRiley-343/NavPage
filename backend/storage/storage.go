@@ -57,7 +57,7 @@ func CheckTable() error {
 func createTable(table string, s *Storage) error {
 	switch table {
 	case "page":
-		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, desc TEXT, url TEXT NOT NULL);`)
+		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, desc TEXT, url TEXT NOT NULL, cat TEXT);`)
 		if err != nil {
 			return err
 		}
