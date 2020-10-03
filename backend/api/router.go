@@ -14,6 +14,7 @@ type Router struct {
 
 func (r *Router) Init() {
 	r.Router = gin.Default()
+
 	r.Router.LoadHTMLGlob("webdist/*.html")
 	r.Router.Static("/", "webdist")
 
