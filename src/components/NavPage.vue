@@ -145,11 +145,6 @@ export default Vue.extend({
     font-size: 18px;
 }
 
-.card-border {
-    /*border-width: 2px !important;*/
-    /*border-color: #DDDDDD !important;*/
-}
-
 .clearfix:before,
 .clearfix:after {
     display: table;
