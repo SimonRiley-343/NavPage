@@ -66,96 +66,96 @@ export default Vue.extend({
 </script>
 
 <style>
-    .font-color-white {
-        color: #FFFFFF;
-    }
+.font-color-white {
+    color: #FFFFFF;
+}
 
-    .font-color-navyblue {
-        color: #183055;
-    }
+.font-color-navyblue {
+    color: #183055;
+}
 
-    .font-color-black {
-        color: #000000;
-    }
+.font-color-black {
+    color: #000000;
+}
 
-    .navpage-header {
-        width: 100%;
-    }
+.navpage-header {
+    width: 100%;
+}
 
-    .navpage-logo {
-        float: left;
-        height: 120px;
-        margin-left: 10px;
-        display: flex;
-        align-items: center;
-    }
+.navpage-logo {
+    float: left;
+    height: 120px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
 
-    .navpage-logo-img {
-        width: 60px;
-        height: 60px;
-    }
+.navpage-logo-img {
+    width: 60px;
+    height: 60px;
+}
 
-    .navpage-title {
-        float: left;
-        height: 120px;
-        line-height: 120px;
-        margin: 0 20px;
-    }
+.navpage-title {
+    float: left;
+    height: 120px;
+    line-height: 120px;
+    margin: 0 20px;
+}
 
-    .navpage-desc {
-        text-align: left;
-        margin-left: 10px;
-    }
+.navpage-desc {
+    text-align: left;
+    margin-left: 10px;
+}
 
-    .navpage-desc p {
-        margin-block-start: 0.5em;
-        margin-block-end: 0.5em;
-    }
+.navpage-desc p {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
 
-    .book-cards {
-        margin-top: 6em;
-    }
+.book-cards {
+    margin-top: 6em;
+}
 
-    .card-gutter {
-        padding: 0 10px;
-        margin-bottom: 10px;
-        transform: perspective(100px) scale(1);
-        transition: 0.2s;
-    }
+.card-gutter {
+    padding: 0 10px;
+    margin-bottom: 10px;
+    transform: perspective(100px) scale(1);
+    transition: 0.2s;
+}
 
-    .card-gutter:hover {
-        -webkit-transform: perspective(100px) scale(1.04);
-        -moz-transform: perspective(100px) scale(1.04);
-        -ms-transform: perspective(100px) scale(1.04);
-        -o-transform: perspective(100px) scale(1.04);
-        transform: perspective(100px) scale(1.04);
-        transition: 0.2s;
-    }
+.card-gutter:hover {
+    -webkit-transform: perspective(100px) scale(1.04);
+    -moz-transform: perspective(100px) scale(1.04);
+    -ms-transform: perspective(100px) scale(1.04);
+    -o-transform: perspective(100px) scale(1.04);
+    transform: perspective(100px) scale(1.04);
+    transition: 0.2s;
+}
 
-    .card-cursor {
-        cursor: pointer;
-    }
+.card-cursor {
+    cursor: pointer;
+}
 
-    .card-header {
-        font-size: 20px;
-        font-weight: bold;
-    }
+.card-header {
+    font-size: 20px;
+    font-weight: bold;
+}
 
-    .card-desc {
-        font-size: 18px;
-    }
+.card-desc {
+    font-size: 18px;
+}
 
-    .card-border {
-        /*border-width: 2px !important;*/
-        /*border-color: #DDDDDD !important;*/
-    }
+.card-border {
+    /*border-width: 2px !important;*/
+    /*border-color: #DDDDDD !important;*/
+}
 
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
-    .clearfix:after {
-        clear: both
-    }
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both
+}
 </style>

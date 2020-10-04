@@ -1,6 +1,5 @@
 <template>
     <div id="app">
-        <div class="bg"></div>
         <NavPage id="navpage"></NavPage>
     </div>
 </template>
@@ -16,7 +15,11 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style lang="scss">
+html, body, #app {
+    height: 100%;
+}
+
 body {
     margin: 0;
 }
@@ -26,20 +29,17 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-}
-
-.bg {
     background-image: url("assets/bg.png");
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
     position: absolute;
-    top: -200px;
-    bottom: -200px;
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: -1;
-    min-height: 1200px;
+    min-height: 900px;
 }
 
 #navpage {
