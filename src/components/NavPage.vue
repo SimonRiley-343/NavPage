@@ -21,17 +21,24 @@
           </div>
           <div class="book-cards">
               <el-row>
-                  <el-col :xl="6" :lg="6" :md="8" :sm="12" :xs="24" class="card-gutter"
-                          v-for="item in cardInfo" :key="item.id">
-                      <a class="card-url" :href="item.url">
-                          <el-card class="card-cursor card-border">
-                              <div slot="header" class="clearfix card-header font-color-navyblue">
-                                  <span>{{item.name}}</span>
-                              </div>
-                              <div class="card-desc font-color-black">{{item.desc}}</div>
+                  <div v-for="(pages, cat) in cardInfoGroupByCat" :key="cat">
+                      <el-col>
+                          <el-card class="card-cat" :body-style="{padding: '10px 15px'}">
+                              <div>{{cat}}</div>
                           </el-card>
-                      </a>
-                  </el-col>
+                      </el-col>
+                      <el-col :xl="6" :lg="6" :md="8" :sm="12" :xs="24" class="card-gutter"
+                              v-for="item in pages" :key="item.id">
+                          <a class="card-url" :href="item.url">
+                              <el-card class="card-cursor card-border">
+                                  <div slot="header" class="clearfix card-header font-color-navyblue">
+                                      <span>{{item.name}}</span>
+                                  </div>
+                                  <div class="card-desc font-color-black">{{item.desc}}</div>
+                              </el-card>
+                          </a>
+                      </el-col>
+                  </div>
               </el-row>
           </div>
       </el-main>
@@ -46,7 +53,7 @@ export default Vue.extend({
     name: 'NavPage',
     data () {
         return {
-            cardInfo: []
+            cardInfoGroupByCat: {}
         }
     },
     mounted () {
@@ -55,7 +62,17 @@ export default Vue.extend({
     methods: {
         getPagesInfo () {
             axios.post('/api/pages').then(response => {
-                this.cardInfo = response.data.pages
+                const cardInfo = {}
+                const pagesInfo = response.data.pages
+                Object.keys(pagesInfo).forEach(key => {
+                    const cat = pagesInfo[key].cat
+                    if (!Object.prototype.hasOwnProperty.call(cardInfo, cat)) {
+                        cardInfo[cat] = []
+                    }
+                    cardInfo[cat].push(pagesInfo[key])
+                })
+                this.cardInfoGroupByCat = cardInfo
+                this.$forceUpdate()
             }).catch(e => {
                 console.log(e)
             })
@@ -113,6 +130,14 @@ export default Vue.extend({
 
 .book-cards {
     margin-top: 6em;
+}
+
+.card-cat {
+    width: max-content;
+    font-size: 18px;
+    color: #183055;
+    font-weight: bold;
+    margin: 20px 10px;
 }
 
 .card-gutter {
