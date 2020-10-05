@@ -23,12 +23,14 @@
               <el-row>
                   <el-col :xl="6" :lg="6" :md="8" :sm="12" :xs="24" class="card-gutter"
                           v-for="item in cardInfo" :key="item.id">
-                      <el-card @click.native="openUrl({url : item.url})" class="card-cursor card-border">
-                          <div slot="header" class="clearfix card-header font-color-navyblue">
-                              <span>{{item.name}}</span>
-                          </div>
-                          <div class="card-desc font-color-black">{{item.desc}}</div>
-                      </el-card>
+                      <a class="card-url" :href="item.url">
+                          <el-card class="card-cursor card-border">
+                              <div slot="header" class="clearfix card-header font-color-navyblue">
+                                  <span>{{item.name}}</span>
+                              </div>
+                              <div class="card-desc font-color-black">{{item.desc}}</div>
+                          </el-card>
+                      </a>
                   </el-col>
               </el-row>
           </div>
@@ -51,9 +53,6 @@ export default Vue.extend({
         this.getPagesInfo()
     },
     methods: {
-        openUrl ({ url }: { url: string }) {
-            window.location.replace(url)
-        },
         getPagesInfo () {
             axios.post('/api/pages').then(response => {
                 this.cardInfo = response.data.pages
@@ -132,8 +131,8 @@ export default Vue.extend({
     transition: 0.2s;
 }
 
-.card-cursor {
-    cursor: pointer;
+.card-url {
+    text-decoration: unset;
 }
 
 .card-header {
