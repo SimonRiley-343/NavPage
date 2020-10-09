@@ -3,9 +3,9 @@
       <el-header height="120px">
           <div class="navpage-header">
               <div class="navpage-logo">
-                  <img src="../assets/logo.png" class="navpage-logo-img" alt="WindSpiritIT Books Lib">
+                  <img src="../assets/logo.png" class="navpage-logo-img" alt="WindSpirit IT Doc Lib">
               </div>
-              <h1 class="navpage-title font-color-white">WindSpiritIT Book Lib</h1>
+              <h1 class="navpage-title font-color-white">WindSpirit IT Doc Lib</h1>
           </div>
       </el-header>
       <el-main style="padding-top: 0">

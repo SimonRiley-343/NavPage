@@ -10,7 +10,7 @@ const routes: Array<RouteConfig> = [
         name: 'NavPage',
         component: NavPage,
         meta: {
-            title: 'WindSpiritIT Book Lib'
+            title: 'WindSpirit IT Doc Lib'
         }
     }
 ]
