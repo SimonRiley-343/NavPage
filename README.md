@@ -46,6 +46,40 @@ cd backend/
 go build
 ```
 
+### Nginx 代理
+
+```conf
+server {
+    listen      443 ssl;
+    server_name domain.com;
+    root        path/to/gitbook;
+
+    location = / {
+        proxy_pass          http://localhost:8081/;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/(css|js|img) {
+        proxy_pass          http://localhost:8081$request_uri;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /api/ {
+        proxy_pass          http://localhost:8081/;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+
 ## TODO List
 
 ### 前端
