@@ -2,6 +2,12 @@
 
 ## 简介
 
+该项目配合 GitBook 使用
+
+应用实例：[WindSpirit IT 私有文档库](https://doc.leviatan.cn/)
+
+文档库使用 GitBook 编写文档，配合 GitLab CI/CD 自动构建，通过 navpage 在前端列出
+
 ### 前端
 
 前端使用 `VUE`
