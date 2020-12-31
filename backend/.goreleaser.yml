@@ -7,24 +7,13 @@ builds:
     goos:
       - linux
       - windows
-      - darwin
     goarch:
-      - 386
       - amd64
 archives:
-  - name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     replacements:
-      darwin: Darwin
       linux: Linux
       windows: Windows
-      386: i386
       amd64: x86_64
-    format: zip
-snapshot:
-  name_template: "{{ .Tag }}"
 changelog:
   sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
