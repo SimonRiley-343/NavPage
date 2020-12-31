@@ -13,9 +13,9 @@ type ResultMsgPages struct {
 }
 
 type Pages struct {
-	Id   int    `json:"id"`
+	Id   string `json:"id"`
 	Name string `json:"name"`
+	Cat  string `json:"cat"`
 	Desc string `json:"desc"`
 	Url  string `json:"url"`
-	Cat  string `json:"cat"`
 }

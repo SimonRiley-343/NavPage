@@ -23,7 +23,7 @@
 
 - 使用 `go-gin`，`go-router` 提供 HTTP API
 - 使用 `cors` 处理跨域请求问题
-- 使用 `sqlite3` 存储配置
+- 使用 `boltDB` 存储配置
 - 使用 `Go Modules` 进行包管理
 
 ### 项目结构

@@ -2,36 +2,30 @@ package storage
 
 import (
 	"backend/model"
-	"log"
+	"encoding/json"
+	bolt "go.etcd.io/bbolt"
 )
 
 type PageData struct {
-	id   int
 	name string
 	desc string
 	url  string
 	cat  string
 }
 
-func (pd *PageData) Init() error {
-	s, err := Open()
-	if err != nil {
-		return err
-	}
-	defer s.Close()
+func (pd *PageData) Init(s *Storage) error {
+	err := s.DB.Update(func(tx *bolt.Tx) error {
+		bucketPage, err := tx.CreateBucketIfNotExists([]byte(model.DB_NAME_PAGE))
+		if err != nil {
+			return err
+		}
 
-	_, err = s.DB.Exec(`DELETE FROM page;`)
-	if err != nil {
+		err = s.AddPageData(bucketPage, model.DB_PAGE_DEFAULT_NAME, model.DB_PAGE_DEFAULT_CAT,
+			model.DB_PAGE_DEFAULT_DESC, model.DB_PAGE_DEFAULT_URL)
 		return err
-	}
+	})
 
-	_, err = s.DB.Exec(`INSERT INTO page (id, name, desc, url, cat) VALUES (?, ?, ?, ?, ?);`,
-		model.DB_PAGE_DEFAULT_ID, model.DB_PAGE_DEFAULT_NAME, model.DB_PAGE_DEFAULT_DESC,
-		model.DB_PAGE_DEFAULT_URL, model.DB_PAGE_DEFAULT_CAT)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (pd *PageData) GetAllPage() ([]model.Pages, error) {
@@ -41,29 +35,31 @@ func (pd *PageData) GetAllPage() ([]model.Pages, error) {
 	}
 	defer s.Close()
 
-	rows, err := s.DB.Query(`SELECT id, name, desc, url, cat FROM page;`)
+	var pageList []model.Pages
+
+	err = s.DB.View(func(tx *bolt.Tx) error {
+		bucketPage := tx.Bucket([]byte(model.DB_NAME_PAGE))
+		err = bucketPage.ForEach(func(pageIdB, pageDataB []byte) error {
+			var pageData map[string]interface{}
+			err := json.Unmarshal(pageDataB, &pageData)
+			if err != nil {
+				return err
+			}
+			pageList = append(pageList, model.Pages{
+				Id: pageData["id"].(string),
+				Name: pageData["name"].(string),
+				Cat: pageData["cat"].(string),
+				Desc: pageData["desc"].(string),
+				Url: pageData["url"].(string),
+			})
+			return nil
+		})
+		return err
+	})
+
 	if err != nil {
 		return nil, err
 	}
-	defer func() {
-		if err = rows.Close(); err != nil {
-			log.Fatalln(err)
-		}
-	}()
 
-	var pageList []model.Pages
-	var id int
-	var name, desc, url, cat string
-
-	for rows.Next() {
-		if err = rows.Scan(&id, &name, &desc, &url, &cat); err != nil {
-			return nil, err
-		}
-		pageList = append(pageList, model.Pages{Id: id, Name: name, Desc: desc, Url: url, Cat: cat})
-	}
-
-	if rows.Err() != nil {
-		return nil, rows.Err()
-	}
 	return pageList, nil
 }

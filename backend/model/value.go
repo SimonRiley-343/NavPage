@@ -2,11 +2,12 @@ package model
 
 const (
 	DB_FILE_NAME             = "nav_page.db"
-	DB_PAGE_DEFAULT_ID       = 1001
+	DB_NAME_PAGE             = "page"
+	DB_NAME_CONF             = "config"
 	DB_PAGE_DEFAULT_NAME     = "Example"
 	DB_PAGE_DEFAULT_DESC     = "Example description"
 	DB_PAGE_DEFAULT_URL      = "/"
-	DB_PAGE_DEFAULT_CAT      = ""
+	DB_PAGE_DEFAULT_CAT      = "Example"
 	DB_CONFIG_PASSWD         = "passwd"
 	DB_CONFIG_PORT           = "port"
 	DB_CONFIG_DEFAULT_PASSWD = "passwd"

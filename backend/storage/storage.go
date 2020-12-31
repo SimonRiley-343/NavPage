@@ -2,19 +2,20 @@ package storage
 
 import (
 	"backend/model"
-	"database/sql"
+	"encoding/binary"
+	"encoding/json"
 	"errors"
+	bolt "go.etcd.io/bbolt"
 	"log"
-
-	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 type Storage struct {
-	DB *sql.DB
+	DB *bolt.DB
 }
 
 func Open() (*Storage, error) {
-	db, err := sql.Open("sqlite3", "./"+model.DB_FILE_NAME)
+	db, err := bolt.Open(model.DB_FILE_NAME, 0600, &bolt.Options{Timeout: 3 * time.Second})
 	if err != nil {
 		return nil, err
 	}
@@ -34,48 +35,81 @@ func CheckTable() error {
 	}
 	defer s.Close()
 
-	tableList := []string{"config", "page"}
+	bucketList := []string{model.DB_NAME_CONF, model.DB_NAME_PAGE}
 
-	for _, table := range tableList {
-		row := s.DB.QueryRow(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`,
-			table)
+	for _, bucketName := range bucketList {
+		isBucketExist := false
+		err = s.DB.View(func(tx *bolt.Tx) error {
+			if tx.Bucket([]byte(bucketName)) != nil {
+				isBucketExist = true
+			}
+			return nil
+		})
 
-		var isTableExist int
-		if err = row.Scan(&isTableExist); err != nil {
+		if err != nil {
 			return err
 		}
 
-		if isTableExist == 0 {
-			if err = createTable(table, s); err != nil {
+		if !isBucketExist {
+			if err = createBucket(s, bucketName); err != nil {
 				return err
 			}
 		}
 	}
+
 	return nil
 }
 
-func createTable(table string, s *Storage) error {
-	switch table {
-	case "page":
-		_, err := s.DB.Exec(`CREATE TABLE page (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, desc TEXT, url TEXT NOT NULL, cat TEXT);`)
-		if err != nil {
-			return err
-		}
-		pd := PageData{}
-		if err = pd.Init(); err != nil {
-			return err
-		}
-	case "config":
-		_, err := s.DB.Exec(`CREATE TABLE config (name TEXT NOT NULL PRIMARY KEY, value TEXT NOT NULL);`)
-		if err != nil {
-			return err
-		}
-		conf := ConfData{}
-		if err = conf.Init(); err != nil {
-			return err
-		}
-	default:
-		return errors.New("unknown table name")
+func createBucket(s *Storage, bucketName string) error {
+	err := s.DB.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte(bucketName))
+		return err
+	})
+
+	if err != nil {
+		return err
 	}
-	return nil
+
+	switch bucketName {
+	case model.DB_NAME_CONF:
+		confData := ConfData{}
+		err = confData.Init(s)
+	case model.DB_NAME_PAGE:
+		pageData := PageData{}
+		err = pageData.Init(s)
+	default:
+		err = errors.New("Unknown bucket name")
+	}
+	if err != nil {
+		return err
+	}
+
+
+	return err
+}
+
+func (s *Storage) AddPageData(bucket *bolt.Bucket, name string, cat string, desc string, url string) error {
+	pageId, _ := bucket.NextSequence()
+	pageIdB := make([]byte, 8)
+	binary.BigEndian.PutUint64(pageIdB, pageId)
+
+	pageData := model.Pages{
+		Id: string(pageIdB),
+		Name: name,
+		Cat: cat,
+		Desc: desc,
+		Url: url,
+	}
+
+	pageDataEncode, err := json.Marshal(pageData)
+	if err != nil {
+		return err
+	}
+
+	err = bucket.Put(pageIdB, pageDataEncode)
+	return err
+}
+
+func (s *Storage) AddConfData(bucket *bolt.Bucket, key string, value string) error {
+	return bucket.Put([]byte(key), []byte(value))
 }
