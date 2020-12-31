@@ -44,7 +44,7 @@
 ### 自行构建
 
 ```shell
-git clone https://git.leviatan.cn/WindSpirit/navpage.git
+git clone https://github.com/SimonRiley-343/NavPage.git
 cd navpage/
 npm install
 npm run build
