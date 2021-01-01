@@ -2,11 +2,11 @@ package storage
 
 import (
 	"backend/model"
-	"encoding/binary"
 	"encoding/json"
 	"errors"
 	bolt "go.etcd.io/bbolt"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -90,11 +90,10 @@ func createBucket(s *Storage, bucketName string) error {
 
 func (s *Storage) AddPageData(bucket *bolt.Bucket, name string, cat string, desc string, url string) error {
 	pageId, _ := bucket.NextSequence()
-	pageIdB := make([]byte, 8)
-	binary.BigEndian.PutUint64(pageIdB, pageId)
+	pageIdStr := strconv.FormatUint(pageId, 8)
 
 	pageData := model.Pages{
-		Id: string(pageIdB),
+		Id: pageIdStr,
 		Name: name,
 		Cat: cat,
 		Desc: desc,
@@ -106,7 +105,7 @@ func (s *Storage) AddPageData(bucket *bolt.Bucket, name string, cat string, desc
 		return err
 	}
 
-	err = bucket.Put(pageIdB, pageDataEncode)
+	err = bucket.Put([]byte(pageIdStr), pageDataEncode)
 	return err
 }
 
