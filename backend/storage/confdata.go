@@ -43,68 +43,68 @@ func (conf *ConfData) Init(s *Storage) error {
 }
 
 func (conf *ConfData) Port() (int, error) {
-	s, err := Open()
-	if err != nil {
-		return 0, err
-	}
-	defer s.Close()
+    s, err := Open()
+    if err != nil {
+        return 0, err
+    }
+    defer s.Close()
 
-	port := model.DB_CONFIG_DEFAULT_PORT
+    port := model.DB_CONFIG_DEFAULT_PORT
 
-	err = s.DB.View(func(tx *bolt.Tx) error {
-		bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
-		port = string(bucketConf.Get([]byte(model.DB_CONFIG_PORT)))
-		return nil
-	})
-	if err != nil {
-		return 0, err
-	}
+    err = s.DB.View(func(tx *bolt.Tx) error {
+        bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
+        port = string(bucketConf.Get([]byte(model.DB_CONFIG_PORT)))
+        return nil
+    })
+    if err != nil {
+        return 0, err
+    }
 
-	return strconv.Atoi(port)
+    return strconv.Atoi(port)
 }
 
 func (conf *ConfData) CheckPasswd(passwd string) (bool, error) {
-	s, err := Open()
-	if err != nil {
-		return false, err
-	}
-	defer s.Close()
+    s, err := Open()
+    if err != nil {
+        return false, err
+    }
+    defer s.Close()
 
-	var passwdHash string
+    var passwdHash string
 
-	err = s.DB.View(func(tx *bolt.Tx) error {
-		bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
-		passwdHash = string(bucketConf.Get([]byte(model.DB_CONFIG_PASSWD)))
-		return nil
-	})
-	if err != nil {
-		return false, err
-	}
+    err = s.DB.View(func(tx *bolt.Tx) error {
+        bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
+        passwdHash = string(bucketConf.Get([]byte(model.DB_CONFIG_PASSWD)))
+        return nil
+    })
+    if err != nil {
+        return false, err
+    }
 
-	if err = bcrypt.CompareHashAndPassword([]byte(passwdHash), []byte(passwd)); err != nil {
-		if err.Error() == model.ERROR_PASSWD_WRONG {
-			err = nil
-		}
-		return false, err
-	} else {
+    if err = bcrypt.CompareHashAndPassword([]byte(passwdHash), []byte(passwd)); err != nil {
+        if err.Error() == model.ERROR_PASSWD_WRONG {
+            err = nil
+        }
+        return false, err
+    } else {
 		return true, nil
 	}
 }
 
 func (conf *ConfData) UpdatePasswd(new string) error {
-	s, err := Open()
-	if err != nil {
-		return err
-	}
-	defer s.Close()
+    s, err := Open()
+    if err != nil {
+        return err
+    }
+    defer s.Close()
 
-	passwdHash, err := bcrypt.GenerateFromPassword([]byte(new), bcrypt.DefaultCost)
+    passwdHash, err := bcrypt.GenerateFromPassword([]byte(new), bcrypt.DefaultCost)
 
-	err = s.DB.Update(func(tx *bolt.Tx) error {
-		bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
-		err = bucketConf.Put([]byte(model.DB_CONFIG_PASSWD), passwdHash)
-		return err
-	})
+    err = s.DB.Update(func(tx *bolt.Tx) error {
+        bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
+        err = bucketConf.Put([]byte(model.DB_CONFIG_PASSWD), passwdHash)
+        return err
+    })
 
-	return nil
+    return nil
 }
