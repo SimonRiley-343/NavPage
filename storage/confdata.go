@@ -1,45 +1,45 @@
 package storage
 
 import (
-	"backend/model"
-	bolt "go.etcd.io/bbolt"
-	"golang.org/x/crypto/bcrypt"
-	"strconv"
+    "backend/model"
+    bolt "go.etcd.io/bbolt"
+    "golang.org/x/crypto/bcrypt"
+    "strconv"
 )
 
 type ConfData struct {
-	Key   string
-	Value string
+    Key   string
+    Value string
 }
 
 func (conf *ConfData) Init(s *Storage) error {
-	passwdHash, err := bcrypt.GenerateFromPassword([]byte(model.DB_CONFIG_DEFAULT_PASSWD), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
+    passwdHash, err := bcrypt.GenerateFromPassword([]byte(model.DB_CONFIG_DEFAULT_PASSWD), bcrypt.DefaultCost)
+    if err != nil {
+        return err
+    }
 
-	defaultConf := []ConfData{
-		{model.DB_CONFIG_PASSWD, string(passwdHash)},
-		{model.DB_CONFIG_PORT, model.DB_CONFIG_DEFAULT_PORT},
-	}
+    defaultConf := []ConfData{
+        {model.DB_CONFIG_PASSWD, string(passwdHash)},
+        {model.DB_CONFIG_PORT, model.DB_CONFIG_DEFAULT_PORT},
+    }
 
-	err = s.DB.Update(func(tx *bolt.Tx) error {
-		bucketConf, err := tx.CreateBucketIfNotExists([]byte(model.DB_NAME_CONF))
-		if err != nil {
-			return err
-		}
+    err = s.DB.Update(func(tx *bolt.Tx) error {
+        bucketConf, err := tx.CreateBucketIfNotExists([]byte(model.DB_NAME_CONF))
+        if err != nil {
+            return err
+        }
 
-		for _, config := range defaultConf {
-			err = s.AddConfData(bucketConf, config.Key, config.Value)
-			if err != nil {
-				return err
-			}
-		}
+        for _, config := range defaultConf {
+            err = s.AddConfData(bucketConf, config.Key, config.Value)
+            if err != nil {
+                return err
+            }
+        }
 
-		return nil
-	})
+        return nil
+    })
 
-	return err
+    return err
 }
 
 func (conf *ConfData) Port() (int, error) {
@@ -87,8 +87,8 @@ func (conf *ConfData) CheckPasswd(passwd string) (bool, error) {
         }
         return false, err
     } else {
-		return true, nil
-	}
+        return true, nil
+    }
 }
 
 func (conf *ConfData) UpdatePasswd(new string) error {
