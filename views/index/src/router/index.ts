@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
-import NavPage from '@/components/NavPage.vue'
+import Vue from 'vue';
+import VueRouter, { RouteConfig } from 'vue-router';
+import NavPage from '@/components/NavPage.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
     {
@@ -13,19 +13,19 @@ const routes: Array<RouteConfig> = [
             title: 'WindSpirit IT Doc Lib'
         }
     }
-]
+];
 
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
-})
+});
 
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
-        document.title = to.meta.title
+        document.title = to.meta.title;
     }
-    next()
-})
+    next();
+});
 
-export default router
+export default router;

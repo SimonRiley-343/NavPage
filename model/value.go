@@ -17,7 +17,7 @@ const (
 
     REQ_MSG_PARAM_ERR    = "Param error"
     REQ_MSG_LOGIN_FAILED = "Failed login"
-    REQ_MSG_PAGE_NO      = "No page"
+    REQ_MSG_NO_PAGE      = "No page"
     REQ_MSG_SUCCESS      = "Success"
     REQ_MSG_UNKNOWN_ERR  = "Unknown error"
 
@@ -25,7 +25,7 @@ const (
     REQ_CODE_PARAM_ERR    = 101
     REQ_CODE_LOGIN_FAILED = 102
     REQ_CODE_NO_PAGE      = 201
-    REQ_CODE_UNKNOWN_ERR  = 201
+    REQ_CODE_UNKNOWN_ERR  = 202
 
     ERROR_PASSWD_WRONG = "crypto/bcrypt: hashedPassword is not the hash of the given password"
 )

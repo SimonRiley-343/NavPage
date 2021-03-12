@@ -19,7 +19,7 @@ func Pages(c *gin.Context) {
 
     if len(pageList) == 0 {
         reqMsg.Code = model.REQ_CODE_NO_PAGE
-        reqMsg.Msg = model.REQ_MSG_PAGE_NO
+        reqMsg.Msg = model.REQ_MSG_NO_PAGE
         c.JSON(http.StatusOK, reqMsg)
         return
     }
