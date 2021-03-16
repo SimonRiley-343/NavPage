@@ -34,8 +34,6 @@ module.exports = {
                 maxBOF: 1
             }
         ],
-        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'vue/array-bracket-spacing': ['error', 'never'],
         'vue/arrow-spacing': 'error',
         'vue/block-spacing': 'error',
