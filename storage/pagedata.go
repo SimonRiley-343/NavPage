@@ -1,9 +1,10 @@
 package storage
 
 import (
-	"backend/model"
-	"encoding/json"
-	bolt "go.etcd.io/bbolt"
+    "backend/model"
+    "encoding/json"
+    bolt "go.etcd.io/bbolt"
+    "strconv"
 )
 
 type PageData struct {
@@ -20,7 +21,7 @@ func (pd *PageData) Init(s *Storage) error {
             return err
         }
 
-        err = s.AddPageData(bucketPage, model.DB_PAGE_DEFAULT_NAME, model.DB_PAGE_DEFAULT_CAT,
+        _, err = pd.InsertPage(bucketPage, model.DB_PAGE_DEFAULT_NAME, model.DB_PAGE_DEFAULT_CAT,
             model.DB_PAGE_DEFAULT_DESC, model.DB_PAGE_DEFAULT_URL)
         return err
     })
@@ -46,11 +47,11 @@ func (pd *PageData) GetAllPage() ([]model.Pages, error) {
                 return err
             }
             pageList = append(pageList, model.Pages{
-                Id: pageData["id"].(string),
+                Id:   pageData["id"].(string),
                 Name: pageData["name"].(string),
-                Cat: pageData["cat"].(string),
+                Cat:  pageData["cat"].(string),
                 Desc: pageData["desc"].(string),
-                Url: pageData["url"].(string),
+                Url:  pageData["url"].(string),
             })
             return nil
         })
@@ -62,4 +63,29 @@ func (pd *PageData) GetAllPage() ([]model.Pages, error) {
     }
 
     return pageList, nil
+}
+
+func (pd *PageData) InsertPage(bucket *bolt.Bucket, name string, cat string, desc string, url string) (string, error) {
+    pageId, _ := bucket.NextSequence()
+    pageIdStr := strconv.FormatUint(pageId, 8)
+
+    pageData := model.Pages{
+        Id:   pageIdStr,
+        Name: name,
+        Cat:  cat,
+        Desc: desc,
+        Url:  url,
+    }
+
+    pageDataEncode, err := json.Marshal(pageData)
+    if err != nil {
+        return "", err
+    }
+
+    err = bucket.Put([]byte(pageIdStr), pageDataEncode)
+    if err != nil {
+        return "", err
+    }
+
+    return pageIdStr, nil
 }

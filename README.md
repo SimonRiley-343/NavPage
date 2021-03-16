@@ -36,14 +36,14 @@
 
 ### 使用构建好的可执行文件
 
-```shell
+```bash
 ./navpage -p 8080
 # -p 参数指定业务端口
 ```
 
 ### 自行构建
 
-```shell
+```bash
 git clone https://github.com/SimonRiley-343/NavPage.git
 cd navpage/
 npm install

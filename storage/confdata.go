@@ -4,7 +4,6 @@ import (
     "backend/model"
     bolt "go.etcd.io/bbolt"
     "golang.org/x/crypto/bcrypt"
-    "strconv"
 )
 
 type ConfData struct {
@@ -21,6 +20,7 @@ func (conf *ConfData) Init(s *Storage) error {
     defaultConf := []ConfData{
         {model.DB_CONFIG_PASSWD, string(passwdHash)},
         {model.DB_CONFIG_PORT, model.DB_CONFIG_DEFAULT_PORT},
+        {model.DB_CONFIG_SESSIONSECRET, model.DB_CONFIG_DEFAULT_SESSIONSECRET},
     }
 
     err = s.DB.Update(func(tx *bolt.Tx) error {
@@ -30,7 +30,7 @@ func (conf *ConfData) Init(s *Storage) error {
         }
 
         for _, config := range defaultConf {
-            err = s.AddConfData(bucketConf, config.Key, config.Value)
+            err = conf.AddConf(bucketConf, config.Key, config.Value)
             if err != nil {
                 return err
             }
@@ -40,27 +40,6 @@ func (conf *ConfData) Init(s *Storage) error {
     })
 
     return err
-}
-
-func (conf *ConfData) Port() (int, error) {
-    s, err := Open()
-    if err != nil {
-        return 0, err
-    }
-    defer s.Close()
-
-    port := model.DB_CONFIG_DEFAULT_PORT
-
-    err = s.DB.View(func(tx *bolt.Tx) error {
-        bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
-        port = string(bucketConf.Get([]byte(model.DB_CONFIG_PORT)))
-        return nil
-    })
-    if err != nil {
-        return 0, err
-    }
-
-    return strconv.Atoi(port)
 }
 
 func (conf *ConfData) CheckPasswd(passwd string) (bool, error) {
@@ -107,4 +86,29 @@ func (conf *ConfData) UpdatePasswd(new string) error {
     })
 
     return nil
+}
+
+func (conf *ConfData) AddConf(bucket *bolt.Bucket, key string, value string) error {
+    return bucket.Put([]byte(key), []byte(value))
+}
+
+func (conf *ConfData) GetConf(confKey string) (string, error) {
+    s, err := Open()
+    if err != nil {
+        return "", err
+    }
+    defer s.Close()
+
+    var confValue string
+
+    err = s.DB.View(func(tx *bolt.Tx) error {
+        bucketConf := tx.Bucket([]byte(model.DB_NAME_CONF))
+        confValue = string(bucketConf.Get([]byte(confKey)))
+        return nil
+    })
+    if err != nil {
+        return "", err
+    }
+
+    return confValue, nil
 }

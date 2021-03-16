@@ -2,9 +2,11 @@ package main
 
 import (
     "backend/api"
+    "backend/model"
     "backend/storage"
     "flag"
     "log"
+    "strconv"
 )
 
 func main() {
@@ -13,26 +15,40 @@ func main() {
         log.Fatalln(err)
     }
 
-    var port int
-    flag.IntVar(&port, "p", 0, "Set port")
+    var port string
+    flag.StringVar(&port, "p", "", "Set port")
 
     flag.Parse()
 
-    if port == 0 {
+    if port == "" {
         conf := storage.ConfData{}
-        port, err = conf.Port()
+        port, err = conf.GetConf(model.DB_CONFIG_PORT)
         if err != nil {
-            log.Fatalln(err)
+            panic(err)
+        }
+        if port == "" {
+            port = model.DB_CONFIG_DEFAULT_SESSIONSECRET
         }
     }
 
+    portNum, _ := strconv.Atoi(port)
+
     router := api.Router{
-        Port: port,
+        Port: portNum,
     }
     router.Init()
 
-    router.SetPost("/api/login", api.Login)
-    router.SetPost("/api/pages", api.Pages)
+    routerApi := router.Router.Group("/api")
+    {
+        routerApi.POST("/login", api.Login)
+        routerApi.POST("/pages", api.Pages)
+    }
+
+    routerAdminApi := router.Router.Group("/api")
+    {
+        routerAdminApi.Use(router.Auth())
+        routerAdminApi.POST("/addPage", api.AddPage)
+    }
 
     err = router.Run()
     if err != nil {

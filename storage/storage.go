@@ -1,13 +1,11 @@
 package storage
 
 import (
-	"backend/model"
-	"encoding/json"
-	"errors"
-	bolt "go.etcd.io/bbolt"
-	"log"
-	"strconv"
-	"time"
+    "backend/model"
+    "errors"
+    bolt "go.etcd.io/bbolt"
+    "log"
+    "time"
 )
 
 type Storage struct {
@@ -85,29 +83,4 @@ func createBucket(s *Storage, bucketName string) error {
     }
 
     return err
-}
-
-func (s *Storage) AddPageData(bucket *bolt.Bucket, name string, cat string, desc string, url string) error {
-    pageId, _ := bucket.NextSequence()
-    pageIdStr := strconv.FormatUint(pageId, 8)
-
-    pageData := model.Pages{
-        Id: pageIdStr,
-        Name: name,
-        Cat: cat,
-        Desc: desc,
-        Url: url,
-    }
-
-    pageDataEncode, err := json.Marshal(pageData)
-    if err != nil {
-        return err
-    }
-
-    err = bucket.Put([]byte(pageIdStr), pageDataEncode)
-    return err
-}
-
-func (s *Storage) AddConfData(bucket *bolt.Bucket, key string, value string) error {
-    return bucket.Put([]byte(key), []byte(value))
 }
