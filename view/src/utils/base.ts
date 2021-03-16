@@ -1,5 +1,5 @@
 const base = {
-    url: 'http://localhost/api'
+    url: '/api'
 };
 
 export default base;
