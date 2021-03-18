@@ -1,18 +1,13 @@
 <template>
     <div id="app">
-        <nav-page id="navpage"></nav-page>
+        <router-view></router-view>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import NavPage from '@/components/NavPage.vue';
 
-export default Vue.extend({
-    components: {
-        NavPage
-    }
-});
+export default Vue.extend({});
 </script>
 
 <style lang="scss">
@@ -28,23 +23,5 @@ body {
 
 #app {
     font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    background-image: url('assets/bg.png');
-    background-position: 50% 50%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    min-height: 900px;
-}
-
-#navpage {
-    max-width: 1200px;
-    margin: 0 auto;
 }
 </style>

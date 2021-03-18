@@ -44,7 +44,7 @@ func (r *Router) Init() {
     }
 
     store := memstore.NewStore([]byte(sessionSecret))
-    r.Router.Use(sessions.Sessions("epcmsSession", store))
+    r.Router.Use(sessions.Sessions(model.SESSION_NAME, store))
 }
 
 func (r *Router) Run() error {

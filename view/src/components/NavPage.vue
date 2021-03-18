@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container class="navpage">
         <el-header height="120px">
             <div class="navpage-header">
                 <div class="navpage-logo">
@@ -83,7 +83,23 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style lang="scss">
+.navpage {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    background-image: url('../assets/bg.png');
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 900px;
+    padding: 0 calc((100% - 1200px) / 2);
+}
+
 .font-color-white {
     color: #ffffff;
 }

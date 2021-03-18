@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import NavPage from '@/components/NavPage.vue';
+import Login from '@/components/Login.vue';
 
 Vue.use(VueRouter);
 
@@ -12,12 +13,19 @@ const routes: Array<RouteConfig> = [
         meta: {
             title: 'WindSpirit IT Doc Lib'
         }
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login,
+        meta: {
+            title: 'WindSpirit IT Doc Lib - Login'
+        }
     }
 ];
 
 const router = new VueRouter({
     mode: 'history',
-    base: process.env.BASE_URL,
     routes
 });
 
