@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import router from '../router/index';
 
-const http = axios.create({ timeout: 1000 * 12 });
+let http = axios.create({ timeout: 1000 * 12 });
 
 http.interceptors.request.use(
     (config) => {
@@ -22,20 +22,21 @@ http.interceptors.response.use(
         return res;
     },
     (err) => {
-        const statusCode = err.response;
+        let statusCode = err.response;
 
         switch (statusCode) {
             case 401:
                 Message.error('用户 Session 过期，请重新登录');
+                localStorage.removeItem('sessionId');
+                router.push({
+                    name: 'Login'
+                });
                 break;
 
             default:
                 Message.error('未知错误');
                 break;
         }
-
-        localStorage.removeItem('sessionId');
-        router.push('/');
 
         return Promise.reject(err);
     }

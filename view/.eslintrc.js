@@ -14,6 +14,7 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-this-alias': 'off',
         indent: ['warn', 4, { SwitchCase: 1 }],
         semi: ['error', 'always'],
         curly: ['error', 'all'],
@@ -46,6 +47,7 @@ module.exports = {
         'vue/match-component-file-name': 'error',
         'vue/object-curly-spacing': 'error',
         'comma-spacing': ['error', { before: false, after: true }],
-        'comma-style': ['error', 'last']
+        'comma-style': ['error', 'last'],
+        'prefer-const': 'off'
     }
 };

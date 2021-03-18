@@ -57,23 +57,25 @@ export default Vue.extend({
         };
     },
     mounted() {
-        this.getPagesInfo();
+        let _this = this;
+        _this.getPagesInfo();
     },
     methods: {
         getPagesInfo() {
+            let _this = this;
             pages()
                 .then((res) => {
-                    const cardInfo = {};
-                    const pagesInfo = res.data.pages;
+                    let cardInfo = {};
+                    let pagesInfo = res.data.pages;
                     Object.keys(pagesInfo).forEach((key) => {
-                        const cat = pagesInfo[key].cat;
+                        let cat = pagesInfo[key].cat;
                         if (!Object.prototype.hasOwnProperty.call(cardInfo, cat)) {
                             cardInfo[cat] = [];
                         }
                         cardInfo[cat].push(pagesInfo[key]);
                     });
-                    this.cardInfoGroupByCat = cardInfo;
-                    this.$forceUpdate();
+                    _this.cardInfoGroupByCat = cardInfo;
+                    _this.$forceUpdate();
                 })
                 .catch((e) => {
                     console.log(e);

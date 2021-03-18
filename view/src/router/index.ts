@@ -5,7 +5,7 @@ import Login from '@/components/Login.vue';
 
 Vue.use(VueRouter);
 
-const routes: Array<RouteConfig> = [
+let routes: Array<RouteConfig> = [
     {
         path: '/',
         name: 'NavPage',
@@ -24,7 +24,7 @@ const routes: Array<RouteConfig> = [
     }
 ];
 
-const router = new VueRouter({
+let router = new VueRouter({
     mode: 'history',
     routes
 });
