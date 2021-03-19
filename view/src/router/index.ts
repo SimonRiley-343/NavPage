@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import NavPage from '@/components/NavPage.vue';
 import Login from '@/components/Login.vue';
+import Admin from '@/components/Admin.vue';
 
 Vue.use(VueRouter);
 
@@ -20,6 +21,14 @@ let routes: Array<RouteConfig> = [
         component: Login,
         meta: {
             title: 'WindSpirit IT Doc Lib - Login'
+        }
+    },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: Admin,
+        meta: {
+            title: 'Doc Lib Admin'
         }
     }
 ];

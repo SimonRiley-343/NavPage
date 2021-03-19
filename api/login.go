@@ -26,7 +26,6 @@ func Login(c *gin.Context) {
             reqMsg.Code = model.REQ_CODE_SUCCESS
             reqMsg.Msg = model.REQ_MSG_SUCCESS
             reqMsg.Login = true
-
         } else {
             reqMsg.Code = model.REQ_CODE_LOGIN_FAILED
             reqMsg.Msg = model.REQ_MSG_LOGIN_FAILED
@@ -59,7 +58,8 @@ func Login(c *gin.Context) {
         storage.SetSession(c, sessionId, strconv.FormatInt(time.Now().Unix(), 10))
 
         c.SetCookie(model.COOKIE_KEY_SESSIONID, sessionId, 0,
-            "", "", false, true)
+            "/", "", false, false)
+
         c.JSON(http.StatusOK, reqMsg)
         return
     }

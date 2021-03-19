@@ -20,7 +20,6 @@ const (
     DB_CONFIG_DEFAULT_SESSIONSECRET = "navpageSessionSecret"
 
     COOKIE_KEY_SESSIONID = "sessionId"
-    COOKIE_MAXAGE        = 3600
 
     SESSION_NAME  = "navpageSession"
     SESSIONID_LEN = 60

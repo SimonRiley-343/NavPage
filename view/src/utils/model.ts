@@ -13,3 +13,8 @@ export enum reqMsg {
     noPage = 'No page',
     unknownErr = 'Unknown error'
 }
+
+export enum cookies {
+    navpage = 'navpageSession',
+    sessionId = 'sessionId'
+}

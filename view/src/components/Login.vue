@@ -19,7 +19,8 @@
 import Vue from 'vue';
 import { Message } from 'element-ui';
 import { login } from '@/utils/api';
-import { reqCode, reqMsg } from '@/utils/model';
+import { cookies, reqCode } from '@/utils/model';
+import { removeSession, isSessionExist } from '@/utils/session';
 
 export default Vue.extend({
     name: 'Login',
@@ -34,7 +35,7 @@ export default Vue.extend({
     },
     mounted() {
         let _this = this;
-        if (localStorage.getItem('sessionId')) {
+        if (isSessionExist(_this, cookies.navpage) && isSessionExist(_this, cookies.sessionId)) {
             _this.login();
         }
     },
@@ -50,22 +51,26 @@ export default Vue.extend({
 
                     switch (resData.code) {
                         case reqCode.success:
-                            if (resData.status) {
+                            if (resData.login) {
                                 _this.$router.push({
                                     name: 'Admin'
                                 });
+                                return;
                             }
                             break;
                         case reqCode.paramErr:
-                            Message.error('Please input admin password');
+                            Message.error('Login - Please input admin password');
                             break;
                         case reqCode.loginFailed:
-                            Message.error('Login failed, please check password');
+                            Message.error('Login - Login failed, please check password');
                             break;
                         default:
-                            Message.error('Unknown error, please contact site admin');
+                            Message.error('Login - Unknown error, please contact site admin');
                             break;
                     }
+
+                    removeSession(_this, cookies.navpage);
+                    removeSession(_this, cookies.sessionId);
                 })
                 .catch((e) => {
                     console.log(e);
