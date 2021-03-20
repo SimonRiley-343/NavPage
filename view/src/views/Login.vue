@@ -115,7 +115,7 @@ export default Vue.extend({
 
 .login-header {
     text-align: center;
-    margin-top: 5%;
+    margin-top: 6vh;
 }
 
 .login-title {

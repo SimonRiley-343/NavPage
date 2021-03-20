@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import NavPage from '@/components/NavPage.vue';
-import Login from '@/components/Login.vue';
-import Admin from '@/components/Admin.vue';
+import NavPage from '@/views/NavPage.vue';
+import Login from '@/views/Login.vue';
+import Admin from '@/views/Admin.vue';
 import { cookies } from '@/utils/model';
 import Session from '@/utils/session';
 
