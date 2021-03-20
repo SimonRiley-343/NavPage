@@ -27,17 +27,9 @@
                                 <div>{{cat}}</div>
                             </el-card>
                         </el-col>
-                        <el-col :xl="6" :lg="6" :md="8" :sm="12" :xs="24" class="card-gutter" v-for="item in pages"
-                            :key="item.id">
-                            <a class="card-url" :href="item.url">
-                                <el-card class="card-cursor card-border">
-                                    <div slot="header" class="clearfix card-header font-color-navyblue">
-                                        <span>{{item.name}}</span>
-                                    </div>
-                                    <div class="card-desc font-color-black">{{item.desc}}</div>
-                                </el-card>
-                            </a>
-                        </el-col>
+                        <div v-for="item in pages" :key="item.id">
+                            <page-card :data="item"></page-card>
+                        </div>
                     </div>
                 </el-row>
             </div>
@@ -48,11 +40,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import Api from '@/utils/api';
+import pageCard from '@/components/pageCard.vue';
 
 const api = new Api();
 
 export default Vue.extend({
     name: 'NavPage',
+    components: { pageCard },
     data() {
         return {
             cardInfoGroupByCat: {}
@@ -160,43 +154,5 @@ export default Vue.extend({
     color: #183055;
     font-weight: bold;
     margin: 20px 10px;
-}
-
-.card-gutter {
-    padding: 0 10px;
-    margin-bottom: 10px;
-    transform: perspective(100px) scale(1);
-    transition: 0.2s;
-}
-
-.card-gutter:hover {
-    -webkit-transform: perspective(100px) scale(1.04);
-    -moz-transform: perspective(100px) scale(1.04);
-    -ms-transform: perspective(100px) scale(1.04);
-    -o-transform: perspective(100px) scale(1.04);
-    transform: perspective(100px) scale(1.04);
-    transition: 0.2s;
-}
-
-.card-url {
-    text-decoration: unset;
-}
-
-.card-header {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.card-desc {
-    font-size: 18px;
-}
-
-.clearfix:before,
-.clearfix:after {
-    display: table;
-    content: '';
-}
-.clearfix:after {
-    clear: both;
 }
 </style>
