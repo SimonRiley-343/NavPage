@@ -2,9 +2,10 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import router from '../router/index';
 import { cookies } from '@/utils/model';
-import { removeSession } from '@/utils/session';
+import Session from '@/utils/session';
 
-let http = axios.create({ timeout: 1000 * 12 });
+const http = axios.create({ timeout: 1000 * 12 });
+const session = new Session();
 
 http.interceptors.request.use(
     (config) => {
@@ -20,7 +21,6 @@ http.interceptors.response.use(
         return res;
     },
     (err) => {
-        let _this = this;
         let statusCode = err.response;
 
         switch (statusCode) {
@@ -28,8 +28,8 @@ http.interceptors.response.use(
                 Message.error('User session expired, please retry login');
 
                 console.log('Remove Session at http.ts');
-                removeSession(_this, cookies.navpage);
-                removeSession(_this, cookies.sessionId);
+                session.remove(cookies.navpage);
+                session.remove(cookies.sessionId);
 
                 router.push({
                     name: 'Login'

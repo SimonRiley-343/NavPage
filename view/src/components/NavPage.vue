@@ -47,7 +47,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { pages } from '@/utils/api';
+import Api from '@/utils/api';
+
+const api = new Api();
 
 export default Vue.extend({
     name: 'NavPage',
@@ -63,7 +65,7 @@ export default Vue.extend({
     methods: {
         getPagesInfo() {
             let _this = this;
-            pages()
+            api.pages()
                 .then((res) => {
                     let cardInfo = {};
                     let pagesInfo = res.data.pages;
