@@ -16,11 +16,20 @@ import Vue from 'vue';
 
 export default Vue.extend({
     name: 'pageCard',
-    props: ['data'],
+    props: {
+        cardData: {
+            type: Object,
+            default: () => {
+                return {
+                    name: 'None',
+                    desc: 'None',
+                    url: '/'
+                };
+            }
+        }
+    },
     data() {
-        return {
-            cardData: this.data
-        };
+        return {};
     }
 });
 </script>

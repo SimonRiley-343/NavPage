@@ -28,7 +28,7 @@
                             </el-card>
                         </el-col>
                         <div v-for="item in pages" :key="item.id">
-                            <page-card :data="item"></page-card>
+                            <page-card :cardData="item"></page-card>
                         </div>
                     </div>
                 </el-row>
@@ -46,7 +46,9 @@ const api = new Api();
 
 export default Vue.extend({
     name: 'NavPage',
-    components: { pageCard },
+    components: {
+        pageCard
+    },
     data() {
         return {
             cardInfoGroupByCat: {}
